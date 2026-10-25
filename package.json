@@ -1,0 +1,65 @@
+{
+  "name": "dotenv-audit",
+  "version": "0.1.0",
+  "description": "Audit .env files against examples or typed schemas, compare environments without revealing values, and catch committed env files.",
+  "keywords": [
+    "dotenv",
+    "env",
+    "audit",
+    "lint",
+    "schema",
+    "secrets",
+    "cli"
+  ],
+  "homepage": "https://github.com/ChakraCoder/dotenv-audit#readme",
+  "bugs": {
+    "url": "https://github.com/ChakraCoder/dotenv-audit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChakraCoder/dotenv-audit.git"
+  },
+  "license": "MIT",
+  "author": "Yagnang Vyas",
+  "type": "module",
+  "bin": {
+    "dotenv-audit": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "vitest run --coverage",
+    "check": "npm run typecheck && npm run lint && npm run build && npm run test && publint",
+    "prepare": "tsup"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "dotenv": "^18.0.9",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "publint": "^0.3.25",
+    "tsup": "^9.0.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
+  }
+}
