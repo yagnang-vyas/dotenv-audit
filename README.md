@@ -6,6 +6,9 @@ Audit `.env` files against an example file or a typed schema, compare
 environments without revealing values, and catch env files committed to git.
 A zero-dependency Node.js CLI with CI-friendly exit codes and JSON output.
 
+**Try it in your browser:** [dotenv-audit.netlify.app](https://dotenv-audit.netlify.app/)
+runs `check` and `diff` locally on pasted configuration; nothing is uploaded.
+
 ## Why
 
 Deployments fail because `.env` lacks a key that `.env.example` has, a value has
@@ -345,7 +348,8 @@ value-free diff.
 
 ## Web playground
 
-[`web/`](web) holds a static site with an interactive playground and
+Live at **[dotenv-audit.netlify.app](https://dotenv-audit.netlify.app/)**.
+[`web/`](web) holds the static site, with an interactive playground and
 documentation. It runs this package's own `check` and `diff` engine in the
 browser, so nothing is uploaded, and deploys to Netlify with the root
 [`netlify.toml`](netlify.toml). `scan` needs git and stays CLI-only. See
