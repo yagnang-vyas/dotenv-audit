@@ -242,15 +242,21 @@ was chosen unless noted.
 11. **`scan` excludes exactly** `.env.example`, `.env.sample` and
     `.env.template`. Names like `.env.local.example` are reported, because a
     false positive is cheaper than a leaked secret.
-12. **Paths in reports** are printed as the user passed them (scan: relative to
-    the repository root as git reports them), never absolutised.
-13. **Schema details.** `pattern` is an unanchored JavaScript regular
+12. **Paths in reports** are printed as the user passed them, never
+    absolutised. `scan` joins the directory argument with the path git reports
+    relative to it (`scan apps/web` → `apps/web/.env.local`).
+13. **Only `.gitignore` counts for ENV008.** `.git/info/exclude` and global
+    excludes protect only one machine, so a `.env` ignored only by them is still
+    ENV008 (with a message saying so). A negated rule (`!.env`) is not ignored.
+14. **A key whose line failed to parse is not also reported missing.** ENV006
+    already covers it; reporting ENV001 too would double-count one mistake.
+15. **Schema details.** `pattern` is an unanchored JavaScript regular
     expression compiled with the `u` flag (anchor it with `^…$` yourself).
     `minLength`/`maxLength` count Unicode code points. `protocols` match
     case-insensitively. `port` accepts plain digits only (no sign). A top-level
     `$schema` string is allowed so editors can attach a JSON Schema. The email
     check is deliberately simple: no whitespace, exactly one `@`, and a domain
     containing a dot with non-empty labels.
-14. **Unexpected internal errors** print `dotenv-audit: error: unexpected
+16. **Unexpected internal errors** print `dotenv-audit: error: unexpected
 internal error` and exit 2, because a raw exception message could include
     file content.

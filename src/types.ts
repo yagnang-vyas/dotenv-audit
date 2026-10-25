@@ -28,3 +28,38 @@ export interface ParseResult {
   entries: Entry[];
   problems: Problem[];
 }
+
+export type Severity = 'error' | 'warning' | 'note';
+
+export type FindingId =
+  | 'ENV001'
+  | 'ENV002'
+  | 'ENV003'
+  | 'ENV004'
+  | 'ENV005'
+  | 'ENV006'
+  | 'ENV007'
+  | 'ENV008'
+  | 'ENV009'
+  | 'ENV010'
+  | 'ENV011';
+
+/**
+ * One reported issue. There is intentionally no field for a value: findings
+ * identify a file, line and key, and `message` describes the expectation.
+ */
+export interface Finding {
+  id: FindingId;
+  severity: Severity;
+  file: string;
+  /** 1-based line, or `null` when the finding is about the file as a whole. */
+  line: number | null;
+  key: string | null;
+  message: string;
+}
+
+/** An env file's path (as given by the user) and its text. */
+export interface SourceFile {
+  path: string;
+  text: string;
+}
