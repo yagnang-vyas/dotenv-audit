@@ -244,6 +244,13 @@ was chosen unless noted.
     false positive is cheaper than a leaked secret.
 12. **Paths in reports** are printed as the user passed them (scan: relative to
     the repository root as git reports them), never absolutised.
-13. **Unexpected internal errors** print `dotenv-audit: error: unexpected
+13. **Schema details.** `pattern` is an unanchored JavaScript regular
+    expression compiled with the `u` flag (anchor it with `^…$` yourself).
+    `minLength`/`maxLength` count Unicode code points. `protocols` match
+    case-insensitively. `port` accepts plain digits only (no sign). A top-level
+    `$schema` string is allowed so editors can attach a JSON Schema. The email
+    check is deliberately simple: no whitespace, exactly one `@`, and a domain
+    containing a dot with non-empty labels.
+14. **Unexpected internal errors** print `dotenv-audit: error: unexpected
 internal error` and exit 2, because a raw exception message could include
     file content.
