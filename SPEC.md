@@ -210,8 +210,17 @@ was chosen unless noted.
 1. **Delivery.** The brief says never add a remote or push. The repository was
    connected by the author, so milestones are delivered as pull requests. Nothing
    is published to npm.
-2. **Invalid lines.** `dotenv` silently skips lines it cannot parse. dotenv-audit
-   reports them (ENV006) because a silently ignored line is usually a mistake.
+2. **Parser differences from `dotenv`.** These follow the brief and are pinned
+   by `test/unit/parse-compat.test.ts`; everything else matches `dotenv` 18:
+   - `dotenv` silently skips lines it cannot parse; dotenv-audit reports them
+     (ENV006), because a silently ignored line is usually a mistake. This covers
+     keys starting with a digit, `KEY: value` colon syntax and lines without `=`.
+   - In an unquoted value, `#` starts a comment only after whitespace
+     (`A=abc#def` keeps `abc#def`); `dotenv` cuts at any `#`.
+   - Double-quoted values also expand `\t`, `\"` and `\\`; `dotenv` expands only
+     `\n` and `\r`.
+   - An unterminated quote, or text after a closing quote, is a problem and
+     produces no entry; `dotenv` falls back to the raw text.
 3. **Problem messages never quote the line.** An unparseable line may contain a
    value, so ENV006 reports only the line number and the reason.
 4. **Duplicates.** ENV005 is reported at every later occurrence; the last value
