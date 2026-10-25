@@ -1,6 +1,6 @@
 # dotenv-audit
 
-[![CI](https://github.com/ChakraCoder/dotenv-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/ChakraCoder/dotenv-audit/actions/workflows/ci.yml)
+[![CI](https://github.com/yagnang-vyas/dotenv-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/yagnang-vyas/dotenv-audit/actions/workflows/ci.yml)
 
 Audit `.env` files against an example file or a typed schema, compare
 environments without revealing values, and catch env files committed to git.
@@ -36,7 +36,7 @@ CI or before a deploy, and **never prints a value** while doing it.
 dotenv-audit is not published to npm yet. Install it from a clone:
 
 ```sh
-git clone https://github.com/ChakraCoder/dotenv-audit.git
+git clone https://github.com/yagnang-vyas/dotenv-audit.git
 cd dotenv-audit
 npm ci && npm run build && npm link
 dotenv-audit --version
@@ -46,7 +46,7 @@ Once the repository is public you can also run it straight from GitHub (the
 `prepare` script builds it on install):
 
 ```sh
-npx github:ChakraCoder/dotenv-audit check
+npx github:yagnang-vyas/dotenv-audit check
 ```
 
 ## Usage
@@ -233,7 +233,7 @@ jobs:
           node-version: 22
       - name: Install dotenv-audit
         run: |
-          git clone --depth 1 https://github.com/ChakraCoder/dotenv-audit.git "$RUNNER_TEMP/dotenv-audit"
+          git clone --depth 1 https://github.com/yagnang-vyas/dotenv-audit.git "$RUNNER_TEMP/dotenv-audit"
           cd "$RUNNER_TEMP/dotenv-audit" && npm ci && npm run build && npm link
       - name: No env files committed
         run: dotenv-audit scan

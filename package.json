@@ -11,13 +11,13 @@
     "secrets",
     "cli"
   ],
-  "homepage": "https://github.com/ChakraCoder/dotenv-audit#readme",
+  "homepage": "https://github.com/yagnang-vyas/dotenv-audit#readme",
   "bugs": {
-    "url": "https://github.com/ChakraCoder/dotenv-audit/issues"
+    "url": "https://github.com/yagnang-vyas/dotenv-audit/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChakraCoder/dotenv-audit.git"
+    "url": "git+https://github.com/yagnang-vyas/dotenv-audit.git"
   },
   "license": "MIT",
   "author": "Yagnang Vyas",
