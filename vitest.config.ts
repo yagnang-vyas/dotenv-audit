@@ -7,6 +7,7 @@ export default defineConfig({
   define: { __VERSION__: JSON.stringify(pkg.version) },
   test: {
     include: ['test/**/*.test.ts'],
+    globalSetup: ['test/global-setup.ts'],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts'],

@@ -34,17 +34,17 @@ describe('isEnvFileName', () => {
 });
 
 describe('scan', () => {
-  it('is clean when .gitignore covers .env and only examples are tracked', () => {
+  it('is clean when .gitignore covers .env and only examples are tracked', async () => {
     const repo = tempRepo({
       '.gitignore': '.env\n.env.*\n!.env.example\n',
       '.env.example': 'A=\n',
       '.env': 'A=1\n',
     });
     git(repo, 'add', '.');
-    expect(scan(repo)).toEqual([]);
+    expect(await scan(repo)).toEqual([]);
   });
 
-  it('reports tracked env files at any depth (ENV007)', () => {
+  it('reports tracked env files at any depth (ENV007)', async () => {
     const repo = tempRepo({
       '.gitignore': '.env\n',
       '.env.production': 'A=fake\n',
@@ -53,86 +53,88 @@ describe('scan', () => {
       'README.md': '# hi\n',
     });
     git(repo, 'add', '-f', '.');
-    expect(summary(scan(repo), repo)).toEqual([
+    expect(summary(await scan(repo), repo)).toEqual([
       'ENV007 error <repo>/.env.production: env file is tracked by git',
       'ENV007 error <repo>/apps/web/.env: env file is tracked by git',
     ]);
   });
 
-  it('reports committed files and handles unusual names', () => {
+  it('reports committed files and handles unusual names', async () => {
     const repo = tempRepo({ '.gitignore': '.env\n', 'odd dir/.env.with space': 'A=fake\n' });
     git(repo, 'add', '-f', '.');
     git(repo, 'commit', '-qm', 'test');
-    expect(summary(scan(repo), repo)).toEqual([
+    expect(summary(await scan(repo), repo)).toEqual([
       'ENV007 error <repo>/odd dir/.env.with space: env file is tracked by git',
     ]);
   });
 
-  it('reports a missing .gitignore rule (ENV008)', () => {
+  it('reports a missing .gitignore rule (ENV008)', async () => {
     const repo = tempRepo({ 'README.md': '# hi\n' });
-    expect(summary(scan(repo), repo)).toEqual([
+    expect(summary(await scan(repo), repo)).toEqual([
       'ENV008 warning <repo>/.env: .env is not ignored by .gitignore',
     ]);
   });
 
-  it('treats a negated rule as not ignored', () => {
+  it('treats a negated rule as not ignored', async () => {
     const repo = tempRepo({ '.gitignore': '.env\n!.env\n' });
-    expect(summary(scan(repo), repo)).toEqual([
+    expect(summary(await scan(repo), repo)).toEqual([
       'ENV008 warning <repo>/.env: .env is not ignored by .gitignore',
     ]);
   });
 
-  it('does not accept .git/info/exclude as shared protection', () => {
+  it('does not accept .git/info/exclude as shared protection', async () => {
     const repo = tempRepo();
     writeFileSync(join(repo, '.git', 'info', 'exclude'), '.env\n');
-    expect(summary(scan(repo), repo)).toEqual([
+    expect(summary(await scan(repo), repo)).toEqual([
       'ENV008 warning <repo>/.env: .env is ignored only by a local or global exclude file, not by .gitignore',
     ]);
   });
 
-  it('scans only the given subdirectory and honours nested .gitignore files', () => {
+  it('scans only the given subdirectory and honours nested .gitignore files', async () => {
     const repo = tempRepo({
       'other/.env': 'A=fake\n',
       'app/.gitignore': '.env\n',
       'app/.env.local': 'A=fake\n',
     });
     git(repo, 'add', '-f', '.');
-    expect(summary(scan(join(repo, 'app')), repo)).toEqual([
+    expect(summary(await scan(join(repo, 'app')), repo)).toEqual([
       'ENV007 error <repo>/app/.env.local: env file is tracked by git',
     ]);
   });
 
-  it('uses relative paths as given', () => {
+  it('uses relative paths as given', async () => {
     const repo = tempRepo({ '.env': 'A=fake\n' });
     git(repo, 'add', '-f', '.');
     const cwd = process.cwd();
     process.chdir(repo);
     try {
-      expect(scan().map((f) => f.file)).toEqual(['.env', '.env']);
+      expect((await scan()).map((f) => f.file)).toEqual(['.env', '.env']);
     } finally {
       process.chdir(cwd);
     }
   });
 
-  it('rejects directories outside a git repository', () => {
+  it('rejects directories outside a git repository', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'dotenv-audit-norepo-'));
-    expect(() => scan(dir)).toThrow(new UsageError(`not a git repository: ${dir}`));
+    await expect(scan(dir)).rejects.toThrow(new UsageError(`not a git repository: ${dir}`));
   });
 
-  it('rejects paths that are not directories', () => {
+  it('rejects paths that are not directories', async () => {
     const repo = tempRepo({ 'file.txt': 'x' });
-    expect(() => scan(join(repo, 'file.txt'))).toThrow(
+    await expect(scan(join(repo, 'file.txt'))).rejects.toThrow(
       `not a directory: ${join(repo, 'file.txt')}`,
     );
-    expect(() => scan(join(repo, 'missing'))).toThrow(`not a directory: ${join(repo, 'missing')}`);
+    await expect(scan(join(repo, 'missing'))).rejects.toThrow(
+      `not a directory: ${join(repo, 'missing')}`,
+    );
   });
 
-  it('reports a missing git binary as a usage error', () => {
+  it('reports a missing git binary as a usage error', async () => {
     const repo = tempRepo();
     const path = process.env.PATH;
     process.env.PATH = '';
     try {
-      expect(() => scan(repo)).toThrow('git is not installed or not on PATH');
+      await expect(scan(repo)).rejects.toThrow('git is not installed or not on PATH');
     } finally {
       process.env.PATH = path;
     }

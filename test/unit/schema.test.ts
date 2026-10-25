@@ -189,15 +189,15 @@ describe('parseSchema: errors carry a JSON path', () => {
 });
 
 describe('loadSchemaFile', () => {
-  it('reads a schema from disk', () => {
+  it('reads a schema from disk', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'dotenv-audit-schema-'));
     const path = join(dir, 'env.schema.json');
     writeFileSync(path, schemaWith({ A: { type: 'string' } }));
-    expect(loadSchemaFile(path).variables.has('A')).toBe(true);
+    expect((await loadSchemaFile(path)).variables.has('A')).toBe(true);
   });
 
-  it('reports a missing file as a usage error', () => {
-    expect(() => loadSchemaFile('does-not-exist.json')).toThrow(
+  it('reports a missing file as a usage error', async () => {
+    await expect(loadSchemaFile('does-not-exist.json')).rejects.toThrow(
       'cannot read does-not-exist.json: file not found',
     );
   });

@@ -14,8 +14,8 @@ const summary = (findings: Finding[]): string[] =>
   findings.map((f) => `${f.id} ${f.severity} ${String(f.line)} ${String(f.key)}: ${f.message}`);
 
 describe('check fixtures', () => {
-  it('passes a valid env against the example and the schema', () => {
-    const schema = loadSchemaFile(`${dir}/env.schema.json`);
+  it('passes a valid env against the example and the schema', async () => {
+    const schema = await loadSchemaFile(`${dir}/env.schema.json`);
     expect(check({ env: file('valid.env'), example: file('example.env'), schema })).toEqual([]);
   });
 
@@ -33,8 +33,8 @@ describe('check fixtures', () => {
     ]);
   });
 
-  it('reports schema findings for the broken env', () => {
-    const schema = loadSchemaFile(`${dir}/env.schema.json`);
+  it('reports schema findings for the broken env', async () => {
+    const schema = await loadSchemaFile(`${dir}/env.schema.json`);
     expect(summary(check({ env: file('broken.env'), schema }))).toEqual([
       'ENV001 error null ADMIN_EMAIL: required key is missing',
       'ENV001 error null WORKERS: required key is missing',
@@ -139,11 +139,11 @@ describe('check rules', () => {
     ]);
   });
 
-  it('never includes values in findings', () => {
+  it('never includes values in findings', async () => {
     const findings = check({
       env: file('broken.env'),
       example: file('example.env'),
-      schema: loadSchemaFile(`${dir}/env.schema.json`),
+      schema: await loadSchemaFile(`${dir}/env.schema.json`),
     });
     expect(JSON.stringify(findings)).not.toContain('fake-secret-value-123');
     expect(JSON.stringify(findings)).not.toContain('three-thousand');

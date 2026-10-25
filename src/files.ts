@@ -1,13 +1,13 @@
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { UsageError } from './errors.js';
 
 /**
  * Reads a UTF-8 text file, turning file-system failures into usage errors.
  * The message names the path and the reason only, never file content.
  */
-export function readTextFile(path: string): string {
+export async function readTextFile(path: string): Promise<string> {
   try {
-    return readFileSync(path, 'utf8');
+    return await readFile(path, 'utf8');
   } catch (error) {
     throw new UsageError(`cannot read ${path}: ${describeReadError(error)}`);
   }

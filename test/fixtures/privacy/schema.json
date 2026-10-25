@@ -1,0 +1,10 @@
+{
+  "variables": {
+    "API_KEY": { "type": "string", "pattern": "^sk_", "minLength": 40 },
+    "DB_PASSWORD": { "type": "enum", "values": ["a", "b"] },
+    "PORT": { "type": "port" },
+    "DUPLICATED": { "type": "json" },
+    "MISSING_KEY": { "type": "url" }
+  },
+  "allowUnknown": false
+}

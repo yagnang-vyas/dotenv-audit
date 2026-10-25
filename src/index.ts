@@ -12,3 +12,8 @@ export { scan, isEnvFileName } from './scan.js';
 export { isPlaceholder, isSecretLookingKey } from './placeholders.js';
 export { sortFindings } from './findings.js';
 export type { Finding, FindingId, Severity, SourceFile } from './types.js';
+export { formatText } from './report/text.js';
+export type { TextOptions } from './report/text.js';
+export { formatJson, JSON_SCHEMA_VERSION } from './report/json.js';
+export { summarize } from './report/summary.js';
+export type { Command, ReportInput, Summary } from './report/summary.js';

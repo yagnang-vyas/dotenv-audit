@@ -51,8 +51,8 @@ const TYPE_PROPERTIES: Readonly<Record<VariableType, readonly string[]>> = {
 const TOP_LEVEL_PROPERTIES = ['$schema', 'variables', 'allowUnknown'];
 
 /** Reads and validates a schema file. Throws `UsageError` on any problem. */
-export function loadSchemaFile(path: string): Schema {
-  return parseSchema(readTextFile(path), path);
+export async function loadSchemaFile(path: string): Promise<Schema> {
+  return parseSchema(await readTextFile(path), path);
 }
 
 /**

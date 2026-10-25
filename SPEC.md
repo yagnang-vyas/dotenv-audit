@@ -130,7 +130,7 @@ repository, `scan` is a usage error.
 | --------------------------------- | ------- | -------------------------------------------- |
 | `--format text\|json`             | `text`  | Output format                                |
 | `--fail-on error\|warning\|never` | `error` | Lowest severity that makes the exit code 1   |
-| `--quiet`                         | off     | Text format: print findings only, no summary |
+| `-q`, `--quiet`                   | off     | Text format: print findings only, no summary |
 | `-v`, `--version`                 |         | Print the version                            |
 | `-h`, `--help`                    |         | Print help                                   |
 
@@ -175,6 +175,11 @@ Text:
 .env:4  error  ENV004  PORT: expected an integer between 1 and 65535
 1 error, 0 warnings, 0 notes
 ```
+
+Findings without a line (for example ENV001) print the path alone. With no
+findings the summary is `no findings`. `diff` adds a counts line before the
+summary: `a.env vs b.env: 1 only in a.env, 1 only in b.env, 2 different, 2 identical`.
+`--quiet` drops both summary lines, so a clean run prints nothing.
 
 JSON (`schemaVersion` 1):
 
@@ -257,6 +262,11 @@ was chosen unless noted.
     `$schema` string is allowed so editors can attach a JSON Schema. The email
     check is deliberately simple: no whitespace, exactly one `@`, and a domain
     containing a dot with non-empty labels.
-16. **Unexpected internal errors** print `dotenv-audit: error: unexpected
+16. **`--fail-on` has no `note` level.** Only `error`,
+    `warning` and `never` are accepted, as in the brief; notes (ENV011) never
+    fail a run.
+17. **Interrupts.** The CLI does its I/O asynchronously so a SIGINT handler can
+    run and exit with 130.
+18. **Unexpected internal errors** print `dotenv-audit: error: unexpected
 internal error` and exit 2, because a raw exception message could include
     file content.

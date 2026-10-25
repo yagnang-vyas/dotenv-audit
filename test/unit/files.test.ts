@@ -8,17 +8,19 @@ import { describeReadError, readTextFile } from '../../src/files.js';
 describe('readTextFile', () => {
   const dir = mkdtempSync(join(tmpdir(), 'dotenv-audit-files-'));
 
-  it('reads a file', () => {
+  it('reads a file', async () => {
     const path = join(dir, 'ok.env');
     writeFileSync(path, 'A=1');
-    expect(readTextFile(path)).toBe('A=1');
+    expect(await readTextFile(path)).toBe('A=1');
   });
 
   it.each([
     ['missing file', join(dir, 'missing.env'), 'file not found'],
     ['directory', dir, 'is a directory'],
-  ])('reports a %s as a usage error', (_name, path, reason) => {
-    expect(() => readTextFile(path)).toThrow(new UsageError(`cannot read ${path}: ${reason}`));
+  ])('reports a %s as a usage error', async (_name, path, reason) => {
+    await expect(readTextFile(path)).rejects.toThrow(
+      new UsageError(`cannot read ${path}: ${reason}`),
+    );
   });
 
   it.each([
