@@ -3,6 +3,8 @@
 A static site with an interactive playground and documentation for
 [dotenv-audit](../README.md). It runs the CLI's own audit engine in the browser.
 
+Live at **[dotenv-audit.netlify.app](https://dotenv-audit.netlify.app/)**.
+
 ## How it works
 
 - **Same engine as the CLI.** The site imports `parse`, `check`, `diff`,

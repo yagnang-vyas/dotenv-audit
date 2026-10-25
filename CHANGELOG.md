@@ -22,3 +22,6 @@ All notable changes to this project are documented here. The format follows
 - Deterministic text and JSON (`schemaVersion` 1) reports, `--fail-on`, and exit
   codes 0, 1, 2 and 130.
 - Privacy test suite guaranteeing no env value reaches stdout or stderr.
+- Web playground and documentation site (`web/`, live at
+  <https://dotenv-audit.netlify.app/>) that runs `check` and `diff` in the
+  browser with the CLI's own engine.
