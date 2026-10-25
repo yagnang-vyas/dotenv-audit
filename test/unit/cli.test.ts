@@ -165,6 +165,7 @@ describe('main', () => {
 
   it('exits with 130 on SIGINT while running and removes the handler afterwards', async () => {
     vi.spyOn(process.stdout, 'write').mockReturnValue(true);
+    // process.exit returns never; the mock must not actually exit the test runner.
     const exit = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
     const before = process.listenerCount('SIGINT');
     const running = main(['--version']);

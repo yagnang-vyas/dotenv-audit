@@ -155,6 +155,7 @@ class SchemaReader {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
       this.fail(path, 'expected an object');
     }
+    // Checked above: a non-null, non-array object parsed from JSON.
     return value as JsonObject;
   }
 
