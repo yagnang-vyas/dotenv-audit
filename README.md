@@ -343,6 +343,14 @@ $ dotenv-audit check --env .env.example --schema env.schema.json --format json
 dotenv-audit works from the outside, across files, with CI exit codes and a
 value-free diff.
 
+## Web playground
+
+[`web/`](web) holds a static site with an interactive playground and
+documentation. It runs this package's own `check` and `diff` engine in the
+browser, so nothing is uploaded, and deploys to Netlify with the root
+[`netlify.toml`](netlify.toml). `scan` needs git and stays CLI-only. See
+[web/README.md](web/README.md).
+
 ## Development
 
 ```sh
